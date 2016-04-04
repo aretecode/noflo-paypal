@@ -1,0 +1,40 @@
+{
+  "name": "noflo-paypal",
+  "version": "0.0.3",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aretecode/noflo-paypal.git"
+  },
+  "engines": {
+    "node": "4.2.0"
+  },
+  "license": "MIT",
+  "main": "./src/Finance.coffee",
+  "dependencies": {
+    "bluebird": "^3.0.5",
+    "body-parser": "^1.14.1",
+    "bunyan": "^1.5.1",
+    "cli-color": "~1.1.0",
+    "coffee-cache": "1.0.2",
+    "coffee-script": "1.15.0",
+    "noflo": "^0.7.2",
+    "noflo-core": "^0.1.14",
+    "noflo-nodejs": "^0.5.2",
+    "noflo-tester": "0.0.2",
+    "paypal-rest-sdk": "1.6.8"
+  },
+  "devDependencies": {
+    "chai": "~3.4.1",
+    "chai-datetime": "^1.4.0",
+    "coffeelint": "^1.13.1",
+    "fbp": "^1.1.4",
+    "grunt": "^0.4.5",
+    "grunt-coffeelint": "0.0.15",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "~2.3.4"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/noflo-nodejs --trace --debug",
+    "test": "grunt test"
+  }
+}

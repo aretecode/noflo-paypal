@@ -1,0 +1,7 @@
+{
+  "name": "noflo-paypal",
+  "description": "",
+  "repository": "https://github.com/aretecode/noflo-paypal",
+  "keywords": ["node", "express", "noflo", "finance", "flowhub"],
+  "image": "heroku/nodejs"
+}
