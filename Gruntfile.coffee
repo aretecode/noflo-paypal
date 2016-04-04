@@ -22,17 +22,10 @@ module.exports = ->
             value: 80
             level: 'ignore'
 
-    #'node-inspector':
-    #  dev: {}
-
   # Grunt plugins used for testing
   @loadNpmTasks 'grunt-mocha-test'
   @loadNpmTasks 'grunt-coffeelint'
 
-  # Grunt plugins used for debugging
-  #@loadNpmTasks 'grunt-node-inspector'
-
   # Our local tasks
   @registerTask 'test', ['coffeelint', 'mochaTest']
-  @registerTask 'nodeinsp', ['node-inspector']
   @registerTask 'default', ['test']
