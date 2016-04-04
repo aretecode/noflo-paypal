@@ -8,6 +8,7 @@ u = require('./../components/UpdateCharge.coffee').getComponent()
 r = require('./../components/RefundCharge.coffee').getComponent()
 l = require('./../components/PaymentHistory.coffee').getComponent()
 s = require('./../components/Subscription.coffee').getComponent()
+generator = require 'creditcard-generator'
 
 # for testing
 paypal = require 'paypal-rest-sdk'
@@ -84,11 +85,13 @@ describe 'Charges', ->
         assert.fail data, null
         done data
 
+      ccNum = generator.GenCC("VISA")[0]
+
       payer =
         'payment_method': 'credit_card'
         'funding_instruments': [ { 'credit_card':
           'type': 'visa'
-          'number': '4417119669820331'
+          'number': ccNum #'4539927161820887' #ccNumber + '' #'4539927161820887' #ccNumber #'4417119669820331'
           'expire_month': '11'
           'expire_year': '2020'
           'cvv2': '874'
@@ -113,11 +116,13 @@ describe 'Charges', ->
         secondCharge = data
         done()
 
+      ccNum = generator.GenCC("VISA")[0]
+
       payer =
         'payment_method': 'credit_card'
         'funding_instruments': [ { 'credit_card':
           'type': 'visa'
-          'number': '4417119669820331'
+          'number': ccNum # '4417119669820331'
           'expire_month': '11'
           'expire_year': '2020'
           'cvv2': '874'
@@ -173,6 +178,7 @@ describe 'Charges', ->
 
       # chai.expect(data).to.be.an 'object'
       # chai.expect(data).to.deep.equal charge
+      console.log charge
 
       t.send 'paypal', paypal
       t.send 'id', charge.id
@@ -194,7 +200,7 @@ describe 'Charges', ->
     ###
 
     it 'should refund a part of the charge if amount is provided', (done) ->
-      tryTryAgain = null
+      #tryTryAgain = null
 
       ###
       t.receive 'error', (data) ->
@@ -207,7 +213,7 @@ describe 'Charges', ->
         chai.expect(data).to.be.an 'object'
         chai.expect(data.charge).to.equal charge.id
         chai.expect(data.amount).to.equal 20
-        clearInterval tryTryAgain
+        #clearInterval tryTryAgain
         done()
 
       cid = secondCharge
@@ -215,6 +221,8 @@ describe 'Charges', ->
         .related_resources[0]
         .sale
         .id
+
+      console.log cid, ' <- charge id '
 
       #t.receive 'error', (data) ->
       #  throw new Error(data)
@@ -226,13 +234,14 @@ describe 'Charges', ->
         chai.expect(data.amount.total).to.be.at.least 20
         done()
 
+      # would be refunding 20/50 though
       t.send 'amount', '20.00' # refund 20c @TODO (would default to $)
       t.send 'currency', 'USD'
 
       setTimeout ->
         t.send 'paypal', paypal
         t.send 'id', cid
-      , 200000
+      , 20000 # 200000
 
       ###
       setTimeout ->
@@ -344,12 +353,20 @@ describe 'Charges', ->
         # chai.expect(data.amount.total).to.be.at.least 20
         done()
 
-      t.send 'paypal', paypal
+      pp = require 'paypal-rest-sdk'
+      pp.configure
+        'mode': 'sandbox' # sandbox or live
+        'client_id': process.env.PAYPAL_CLIENT_ID
+        'client_secret': process.env.PAYPAL_CLIENT_SECRET
+
+      t.send 'paypal', pp
       t.send 'data',
         definitions:
           amount:
             value: 20 # @TODO: WHY IS THIS IN VALUE AND THE OTHER TOTAL
             currency: 'USD'
+
+
 
 
   ###

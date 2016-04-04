@@ -10,14 +10,9 @@ paypal.configure
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
 describe 'Payment', ->
-  apiKeys =
-    mode: process.env.PAYPAL_MODE or 'sandbox'
-    id: process.env.PAYPAL_CLIENT_ID
-    secret: process.env.PAYPAL_CLIENT_SECRET
-
-  chai.expect(apiKeys).not.to.be.empty
-
   describe 'Payment component', ->
+    console.log c
+
     t = new Tester c
 
     before (done) ->

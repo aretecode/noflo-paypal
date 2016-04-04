@@ -19,17 +19,13 @@ exports.getComponent = ->
         datatype: 'object'
       intervalname:
         datatype: 'string'
-        control: true
       data:
         datatype: 'object'
-        control: true
       paypal:
         datatype: 'object'
         description: 'Configured Paypal client'
         required: true
     outPorts:
-      out:
-        datatype: 'integer'
       sub:
         datatype: 'object'
       error:
@@ -172,7 +168,7 @@ exports.getComponent = ->
 
       # console.log ' SUBSCRIPTION COMPONENT NPM ', billingPlanAttributes
 
-      console.log paypal, ' PAYPAL IN SUBSCRIPTION'
+      #console.log paypal, ' PAYPAL IN SUBSCRIPTION'
       paypal.billingPlan.create billingPlanAttributes, (err, billingPlan) ->
         return output.sendDone err if err
         output.sendDone sub: billingPlan

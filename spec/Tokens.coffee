@@ -121,4 +121,4 @@ describe 'Tokens', ->
       setTimeout ->
         t.send 'paypal', paypal
         t.send 'token', token
-      , 200000
+      , 50000 # 200000
