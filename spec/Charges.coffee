@@ -17,17 +17,10 @@ paypal.configure
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
 describe 'Charges', ->
-  apiKeys =
-    mode: process.env.PAYPAL_MODE or 'sandbox'
-    id: process.env.PAYPAL_CLIENT_ID
-    secret: process.env.PAYPAL_CLIENT_SECRET
-
   charge = null
   secondCharge = null
   paypalAuthorizeCharge = null
   approvedPaypal = null
-
-  chai.expect(apiKeys).not.to.be.empty
 
   describe 'CreateCharge component', ->
     t = new Tester c
@@ -36,6 +29,7 @@ describe 'Charges', ->
     before (done) ->
       t.start ->
         tx.start ->
+          console.log ' loaded it...'
           done()
 
     ###

@@ -13,15 +13,13 @@
   "dependencies": {
     "bluebird": "^3.0.5",
     "body-parser": "^1.14.1",
-    "bunyan": "^1.5.1",
     "cli-color": "~1.1.0",
-    "coffee-cache": "1.0.2",
-    "coffee-script": "^1.10.0",
-    "noflo": "^0.7.2",
+    "coffee-script": "1.10.0",
     "noflo-core": "^0.1.14",
     "noflo-nodejs": "^0.5.2",
     "noflo-tester": "0.0.2",
-    "paypal-rest-sdk": "1.6.8"
+    "paypal-rest-sdk": "1.6.8",
+    "noflo": "0.7.2"
   },
   "devDependencies": {
     "chai": "~3.4.1",
