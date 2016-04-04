@@ -29,7 +29,6 @@ describe 'Charges', ->
     before (done) ->
       t.start ->
         tx.start ->
-          console.log ' loaded it...'
           done()
 
     ###
