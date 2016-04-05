@@ -50,7 +50,5 @@
     "objects/SplitObject": "node_modules/noflo-objects/components/SplitObject.coffee",
     "objects/UniqueArray": "node_modules/noflo-objects/components/UniqueArray.coffee",
     "objects/Values": "node_modules/noflo-objects/components/Values.coffee",
-
-    "paypal/whatever": "components/PayPalComponent"
   }
 }
