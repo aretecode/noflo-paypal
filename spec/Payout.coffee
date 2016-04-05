@@ -11,8 +11,6 @@ paypal.configure
 
 describe 'Payment', ->
   describe 'Payment component', ->
-    console.log c
-
     t = new Tester c
 
     before (done) ->

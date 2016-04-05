@@ -14,13 +14,7 @@ paypal.configure
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
 describe 'Tokens', ->
-  apiKeys =
-    mode: process.env.PAYPAL_MODE or 'sandbox'
-    id: process.env.PAYPAL_CLIENT_ID
-    secret: process.env.PAYPAL_CLIENT_SECRET
   token = null
-
-  chai.expect(apiKeys).not.to.be.empty
 
   describe 'CreateCardToken component', ->
     t = new Tester c
@@ -78,23 +72,6 @@ describe 'Tokens', ->
         exp_year:  2020
         name: "T. Ester"
 
-  describe 'DeleteCard component', ->
-    t = new Tester d
-    before (done) ->
-      t.start ->
-        done()
-
-    it 'should delete a card', (done) ->
-      t.receive 'error', (data) ->
-        console.log data
-        throw new Error(data)
-
-      t.receive 'out', (data) ->
-        done()
-
-      t.send 'paypal', paypal
-      t.send 'card', token
-
   describe 'RetrieveCard component', ->
     t = new Tester rc
     before (done) ->
@@ -121,4 +98,21 @@ describe 'Tokens', ->
       setTimeout ->
         t.send 'paypal', paypal
         t.send 'token', token
-      , 50000 # 200000
+      , 50000 # 200000 #50000
+
+  describe 'DeleteCard component', ->
+    t = new Tester d
+    before (done) ->
+      t.start ->
+        done()
+
+    it 'should delete a card', (done) ->
+      t.receive 'error', (data) ->
+        console.log data
+        throw new Error(data)
+
+      t.receive 'out', (data) ->
+        done()
+
+      t.send 'paypal', paypal
+      t.send 'card', token
