@@ -29,15 +29,10 @@ exports.getComponent = ->
 
       # @TODO: change
       execute_payment_json = {}
-      execute_payment_json.payer_id = data.payerid
-
-      ###
-        'payer_id': data.payerid # 'Appended to redirect url'
-        'transactions': data.transactions
-      ###
+      execute_payment_json.payer_id = data.payerid # 'Appended to redirect url'
+      # 'transactions': data.transactions
       # paymentId = 'PAYMENT id created in previous step'
 
-      # was paypal.*
       paypal.payment.execute data.paymentid, execute_payment_json, (err, payment) ->
         return output.sendDone err if err
         output.sendDone charge: payment

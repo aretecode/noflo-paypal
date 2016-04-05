@@ -17,18 +17,6 @@ describe 'Payment', ->
       t.start ->
         done()
 
-    ###
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-
-      t.send 'data',
-        currency: 'USD'
-        amount: 10000
-    ###
-
     it 'should send a payout', (done) ->
       t.receive 'out', (data) ->
         done()
@@ -38,7 +26,43 @@ describe 'Payment', ->
         done data
 
       t.send 'paypal', paypal
-      # Charge 50c
-      t.send 'data',
-        currency: 'USD'
-        amount: 50
+
+      sender_batch_id = Math.random().toString(36).substring(9)
+      data =
+        'sender_batch_header':
+          'sender_batch_id': sender_batch_id
+          'email_subject': 'You have a payment'
+        'items': [
+          {
+            'recipient_type': 'EMAIL'
+            'amount':
+              'value': 0.99
+              'currency': 'USD'
+            'receiver': 'shirt-supplier-one@mail.com'
+            'note': 'Thank you.'
+            'sender_item_id': 'item_1'
+          }
+          {
+            'recipient_type': 'EMAIL'
+            'amount':
+              'value': 0.90
+              'currency': 'USD'
+            'receiver': 'shirt-supplier-two@mail.com'
+            'note': 'Thank you.'
+            'sender_item_id': 'item_2'
+          }
+          {
+            'recipient_type': 'EMAIL'
+            'amount':
+              'value': 2.00
+              'currency': 'USD'
+            'receiver': 'shirt-supplier-three@mail.com'
+            'note': 'Thank you.'
+            'sender_item_id': 'item_3'
+          }
+        ]
+
+      # Pay 50c
+      t.send
+        paypal: paypal
+        data: data

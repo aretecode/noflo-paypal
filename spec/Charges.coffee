@@ -32,27 +32,16 @@ describe 'Charges', ->
         tx.start ->
           done()
 
-    ###
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-
-      t.send 'data',
-        currency: 'USD'
-        amount: 10000
-    ###
-
     it 'should fail if currency is missing', (done) ->
       t.receive 'error', (data) ->
         chai.expect(data).to.be.an 'error'
         chai.expect(data.message).to.equal 'Missing currency'
         done()
 
-      t.send 'paypal', paypal
-      t.send 'data',
-        amount: 1000000
+      t.send
+        paypal: paypal
+        data:
+          amount: 1000000
 
     it 'should fail if amount is missing', (done) ->
       t.receive 'error', (data) ->
@@ -60,9 +49,10 @@ describe 'Charges', ->
         chai.expect(data.message).to.equal 'Missing amount'
         done()
 
-      t.send 'paypal', paypal
-      t.send 'data',
-        currency: 'EUR'
+      t.send
+        paypal: paypal
+        data:
+          currency: 'EUR'
 
     # it 'should create a new charge using saved credit card', (done) ->
 
@@ -91,7 +81,7 @@ describe 'Charges', ->
         'payment_method': 'credit_card'
         'funding_instruments': [ { 'credit_card':
           'type': 'visa'
-          'number': ccNum #'4539927161820887' #ccNumber + '' #'4539927161820887' #ccNumber #'4417119669820331'
+          'number': ccNum
           'expire_month': '11'
           'expire_year': '2020'
           'cvv2': '874'
@@ -104,12 +94,13 @@ describe 'Charges', ->
             'postal_code': '43210'
             'country_code': 'US' } ]
 
-      t.send 'paypal', paypal
       # Charge 50c
-      t.send 'data',
-        currency: 'USD'
-        amount: 50
-        payer: payer
+      t.send
+        paypal: paypal
+        data:
+          currency: 'USD'
+          amount: 50
+          payer: payer
 
     it 'should create a new charge using credit card (move elsewhere?)', (done) ->
       t.receive 'charge', (data) ->
@@ -122,7 +113,7 @@ describe 'Charges', ->
         'payment_method': 'credit_card'
         'funding_instruments': [ { 'credit_card':
           'type': 'visa'
-          'number': ccNum # '4417119669820331'
+          'number': ccNum
           'expire_month': '11'
           'expire_year': '2020'
           'cvv2': '874'
@@ -135,27 +126,19 @@ describe 'Charges', ->
             'postal_code': '43210'
             'country_code': 'US' } ]
 
-      t.send 'paypal', paypal
       # Charge 50c
-      t.send 'data',
-        currency: 'USD'
-        amount: 50
-        payer: payer
+      t.send
+        paypal: paypal
+        data:
+          currency: 'USD'
+          amount: 50
+          payer: payer
 
   describe 'GetCharge component', ->
     t = new Tester g
     before (done) ->
       t.start ->
         done()
-
-    ###
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-      t.send 'id', "foo-123"
-    ###
 
     it 'should fail if non-existend ID is provided', (done) ->
       t.receive 'error', (data) ->
@@ -164,8 +147,9 @@ describe 'Charges', ->
         # chai.expect(data.param).to.equal 'id'
         done()
 
-      t.send 'paypal', paypal
-      t.send 'id', "foo-random-invalid-" + uuid.v4()
+      t.send
+        paypal: paypal
+        id: "foo-random-invalid-" + uuid.v4()
 
     it 'should retrieve a charge', (done) ->
       t.receive 'charge', (data) ->
@@ -178,10 +162,10 @@ describe 'Charges', ->
 
       # chai.expect(data).to.be.an 'object'
       # chai.expect(data).to.deep.equal charge
-      console.log charge
 
-      t.send 'paypal', paypal
-      t.send 'id', charge.id
+      t.send
+        paypal: paypal
+        id: charge.id
 
   describe 'RefundCharge component', ->
     t = new Tester r
@@ -189,31 +173,11 @@ describe 'Charges', ->
       t.start ->
         done()
 
-    ###
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-
-      t.send 'id', "foo-123"
-    ###
-
     it 'should refund a part of the charge if amount is provided', (done) ->
-      #tryTryAgain = null
-
-      ###
-      t.receive 'error', (data) ->
-        console.log data
-        throw new Error(data)
-      ###
-
       t.receive 'refund', (data) ->
-        # console.log "\n REEEEFUUUUUUND _____ \n", JSON.stringify(data)
         chai.expect(data).to.be.an 'object'
         chai.expect(data.charge).to.equal charge.id
         chai.expect(data.amount).to.equal 20
-        #clearInterval tryTryAgain
         done()
 
       cid = secondCharge
@@ -221,8 +185,6 @@ describe 'Charges', ->
         .related_resources[0]
         .sale
         .id
-
-      console.log cid, ' <- charge id '
 
       #t.receive 'error', (data) ->
       #  throw new Error(data)
@@ -235,21 +197,15 @@ describe 'Charges', ->
         done()
 
       # would be refunding 20/50 though
-      t.send 'amount', '20.00' # refund 20c @TODO (would default to $)
-      t.send 'currency', 'USD'
+      t.send
+        amount: '20.00' # refund 20c @TODO (would default to $)
+        currency: 'USD'
 
       setTimeout ->
         t.send 'paypal', paypal
         t.send 'id', cid
       , 20000 # 200000
 
-      ###
-      setTimeout ->
-        tryTryAgain = setInterval ->
-          t.send 'id', cid
-        , 10000
-      , 200000
-      ###
 
     it 'should refund entire sum left by default', (done) ->
       tryTryAgain = null
@@ -266,8 +222,6 @@ describe 'Charges', ->
       #   throw new Error(data)
 
       t.receive 'refund', (data) ->
-        # console.log "\n REEEEFUUUUUUND (entire) _____ \n", JSON.stringify(data)
-
         chai.expect(data).to.be.an 'object'
         chai.expect(data.sale_id).to.equal cid
         # App fee is not refunded by default
@@ -283,8 +237,9 @@ describe 'Charges', ->
       , 200000
       ###
       tryTryAgain = setInterval ->
-        t.send 'paypal', paypal
-        t.send 'id', cid
+        t.send
+          paypal: paypal
+          id: cid
       , 10000
 
   describe 'ListCharges component', ->
@@ -292,17 +247,6 @@ describe 'Charges', ->
     before (done) ->
       t.start ->
         done()
-
-    ###
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-
-      t.send 'apikeys', apiKeys
-      t.send 'exec', true
-    ###
 
     it 'should output an array of all charges', (done) ->
       t.receive 'charges', (data) ->
@@ -324,14 +268,6 @@ describe 'Charges', ->
       t.send 'count', 1
       t.send 'exec', true
 
-    c.customer = null
-    c.end_time = null
-    c.count = null
-    c.start_id = null
-    c.start_time = null
-    c.start_index = null
-    c.sortby = null
-
     # TODO test other ListCharges parameters
 
   describe 'Subscription component', ->
@@ -347,10 +283,6 @@ describe 'Charges', ->
 
       t.receive 'sub', (data) ->
         # console.log data
-        # chai.expect(data).to.be.an 'object'
-        # chai.expect(data.id).to.equal cid
-        # App fee is not refunded by default
-        # chai.expect(data.amount.total).to.be.at.least 20
         done()
 
       pp = require 'paypal-rest-sdk'
@@ -366,9 +298,6 @@ describe 'Charges', ->
             value: 20 # @TODO: WHY IS THIS IN VALUE AND THE OTHER TOTAL
             currency: 'USD'
 
-
-
-
   ###
   describe 'UpdateCharge component', ->
     t = new Tester u
@@ -376,39 +305,45 @@ describe 'Charges', ->
       t.start ->
         done()
 
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-
-      t.send 'id', "foo-123"
-
     it 'should fail if neither description nor metadata was sent', (done) ->
-      # Set API key here as we didn't do it before
-      t.send 'apikeys', apiKeys
-
       t.receive 'error', (data) ->
         chai.expect(data).to.be.an 'error'
         chai.expect(data.message).to.contain 'has to be provided'
         done()
 
+      t.send 'paypal', paypal
       t.send 'id', charge.id
 
     it 'should update description or metadata of a charge', (done) ->
+      t.receive 'error', (err) ->
+        console.log err.stack
+        throw new Error(err)
+
       t.receive 'charge', (data) ->
-        chai.expect(data).to.be.an 'object'
-        chai.expect(data.id).to.equal charge.id
-        chai.expect(data.description).to.equal 'A charge for a test'
-        chai.expect(data.metadata).to.deep.equal {foo: 'bar'}
+        console.log data
+        #chai.expect(data).to.be.an 'object'
+        #chai.expect(data.id).to.equal charge.id
+        #chai.expect(data.description).to.equal 'A charge for a test'
+        #chai.expect(data.metadata).to.deep.equal {foo: 'bar'}
         done()
 
+
+
+      ppl = require 'paypal-rest-sdk'
+      ppl.configure
+        'mode': 'sandbox' # sandbox or live
+        'client_id': process.env.PAYPAL_CLIENT_ID
+        'client_secret': process.env.PAYPAL_CLIENT_SECRET
+
+      #console.log ppl, ' come on...'
       t.send
+        paypal: ppl
         description: 'A charge for a test'
         metadata:
           foo: 'bar'
         id: charge.id
-  ###
+    ###
+
 
 
   ###
@@ -509,13 +444,6 @@ describe 'Charges', ->
     it 'Create&Approve&Execute component', (done) ->
 
     console.log "\n\n\n\n CREATE&APPROVED&EXECUTE \n\n\n"
-
-    paypal = require 'paypal-rest-sdk'
-    paypal.configure
-      'mode': apiKeys.mode or 'sandbox' # sandbox or live
-      'client_id': apiKeys.id
-      'client_secret': apiKeys.secret
-
     create_payment_json =
       'intent': 'authorize'
       'payer': 'payment_method': 'paypal'

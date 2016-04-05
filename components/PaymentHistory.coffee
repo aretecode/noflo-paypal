@@ -78,7 +78,7 @@ exports.getComponent = ->
 
         # would reset state to avoid side effects, but that's why we use `control`
 
-        output.sendDone charges: charges
-        #if c.outPorts.hasmore.isAttached()
-        #  output.send hasmore: charges.has_more
-        #output.done()
+        output.send charges: charges
+        if output.ports.hasmore.isAttached()
+          output.send hasmore: charges.has_more
+        output.done()

@@ -6,11 +6,15 @@
 
 # @TODO
 * [x] Convert to new noflo `process` API
-* [ ] Add Graphs
+* [ ] Add Graphs - examples with API Key & ConfigurePaypal
+* [ ] Change `tests/` to use .noflo.json insteadof requiring the component files
 * [ ] Add full functionality for listed requirements
 * [ ] Remove hardcoded parts from Components and put them into tests
 * [ ] Split tests up
-*
+* [x] Change tests to Grunt
+* [ ]
+* [ ] Improve CreateCharge
+
 * [ ] Validate .intent @enum (sale, authorize, or order)
 * [ ] TODO test other ListCharges parameters
 * [ ] Currency in lowest for PayPal, convert?
@@ -19,7 +23,7 @@
 * [ ] Subscription & Others, add URL ports (or improve API, at least have it come in some port)
 * [ ] Reevaluate UpdateCharge
 * [ ] Test, should create a new charge using saved credit card
-* [ ] RecieveCard test - why isn't it loading?
+* [x] RecieveCard test - why isn't it loading? (was using the same card)
 
 ## Components
 

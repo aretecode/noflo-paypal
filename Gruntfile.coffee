@@ -9,7 +9,7 @@ module.exports = ->
         src: ['spec/*.coffee']
         options:
           reporter: 'spec'
-          timeout: 300000
+          timeout: 60000
           require: 'coffee-script/register'
 
     # Coding standards

@@ -4,26 +4,19 @@ noflo = require 'noflo'
 
 exports.getComponent = ->
   new noflo.Component
-    description: 'Create Plan for Regular'
-    icon: 'repeat|refresh'
     inPorts:
       id:
-        datatype: 'string'
-        required: true
+        datatype: 'all'
         description: 'Charge ID'
+        required: true
       description:
         datatype: 'string'
-        control: true
-        required: false
         description: 'Charge description (optional if metadata is provided)'
-      data:
-        datatype: 'object'
-        control: true
+        required: false
       metadata:
         datatype: 'object'
-        required: false
-        control: true
         description: 'Charge metadata (optional if description is provided)'
+        required: false
       paypal:
         datatype: 'object'
         description: 'Configured Paypal client'
@@ -35,10 +28,9 @@ exports.getComponent = ->
         datatype: 'object'
     process: (input, output) ->
       return unless input.has 'id', 'paypal'
-      [id, paypal] = input.getData 'id', 'paypal'
+      [id, paypal, description, metadata] = input.getData 'id', 'paypal', 'description', 'metadata'
       return unless input.ip.type is 'data'
 
-      [description, metadata] = input.getData 'description', 'metadata'
       unless description or metadata
         return output.sendDone noflo.helpers.CustomError 'Description or metadata has to be provided',
           kind: 'internal_error'

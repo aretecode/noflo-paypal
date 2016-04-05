@@ -22,17 +22,6 @@ describe 'Tokens', ->
       t.start ->
         done()
 
-    ###
-    it 'should fail without an API key', (done) ->
-      t.receive 'error', (data) ->
-        chai.expect(data).to.be.an 'error'
-        chai.expect(data.message).to.contain 'API key'
-        done()
-
-      t.send 'card',
-        number: "4242"
-    ###
-
     it 'should fail if card number or expiry data is missing', (done) ->
       t.receive 'error', (data) ->
         chai.expect(data).to.be.an 'array'
@@ -52,25 +41,30 @@ describe 'Tokens', ->
 
     it 'should create a new token', (done) ->
       t.receive 'token', (data) ->
-        console.log "\n\n\n\n NEW CARD TOKEN: \n", data.id
         chai.expect(data).to.be.an 'object'
         chai.expect(data.id).not.to.be.empty
         chai.expect(data.state).to.equal 'ok'
         chai.expect(data.type).to.equal 'visa' # |mastercard|americanexpress|?
+
         # Save charge object for later reuse
         token = data.id
         done()
 
-      t.receive 'error', (data) ->
-        assert.fail data, null
-        done data
+      t.receive 'error', (err) ->
+        console.log err.stack
+        throw new Error(err)
+
+      card =
+        type: 'visa'
+        number: '4417119669820331'
+        expire_month: '11'
+        expire_year: '2019'
+        cvv2: '123'
+        first_name: 'Joe'
+        last_name: 'Shopper'
 
       t.send 'paypal', paypal
-      t.send 'card',
-        number: "4242424242424242"
-        exp_month: 12
-        exp_year:  2020
-        name: "T. Ester"
+      t.send 'card', card
 
   describe 'RetrieveCard component', ->
     t = new Tester rc
@@ -79,18 +73,9 @@ describe 'Tokens', ->
         done()
 
     it 'should find/recieve a card', (done) ->
-
-      t.receive 'error', (data) ->
-        console.log data
-        throw new Error(data)
-
-      ###
-      # tryTryAgain = null
-      # clearInterval tryTryAgain
-      # tryTryAgain = setInterval ->
-      #   t.send 'token', token
-      # , 10000
-      ###
+      t.receive 'error', (err) ->
+        console.log err
+        throw new Error(err)
 
       t.receive 'out', (data) ->
         done()
@@ -107,9 +92,9 @@ describe 'Tokens', ->
         done()
 
     it 'should delete a card', (done) ->
-      t.receive 'error', (data) ->
-        console.log data
-        throw new Error(data)
+      t.receive 'error', (err) ->
+        console.log err
+        throw new Error(err)
 
       t.receive 'out', (data) ->
         done()
