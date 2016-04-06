@@ -14,6 +14,8 @@
 * [x] Change tests to Grunt
 * [ ]
 * [ ] Improve CreateCharge
+* [ ] ^ add CreateChargeJson ? Add ports for each property?
+* [ ] Improve Subscription
 
 * [ ] Validate .intent @enum (sale, authorize, or order)
 * [ ] TODO test other ListCharges parameters
@@ -28,7 +30,7 @@
 ## Components
 
 ### Initial drafts (Round one)
-* [x] Charge customers *
+* [x] Charge customers
 * [x] Make payment subscriptions
 * [x] Send money to customers
 * [x] Refunds

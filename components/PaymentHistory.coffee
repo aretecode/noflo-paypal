@@ -76,8 +76,6 @@ exports.getComponent = ->
       paypal.payment.list query, (err, charges) ->
         return output.sendDone err if err
 
-        # would reset state to avoid side effects, but that's why we use `control`
-
         output.send charges: charges
         if output.ports.hasmore.isAttached()
           output.send hasmore: charges.has_more

@@ -44,88 +44,48 @@ exports.getComponent = ->
     [payload, paypal] = input.getData 'data', 'paypal'
     return unless input.ip.type is 'data'
 
-    ###
-      'amount':
-        'currency': 'USD'
-        'total': '4.54'
-      'is_final_capture': true
-    ###
     if payload.currency?
       payload.currency = payload.currency.toUpperCase()
 
-    ### @ADAPTER ###
-    if payload.amount? and typeof payload.amount isnt 'object'
-      total = payload.amount
-      payload.amount =
-        total: total
-        currency: payload.currency
-      # delete payload.currency
+    amount =
+      currency: payload.currency # 'USD'
+      total: payload.amount # '1.00'
 
     # Validate inputs
     errors = c.checkRequired payload
     if errors.length > 0
       return output.sendDone errors
 
-    ###
-    transactions =
-      [ {
-        'item_list': 'items': [ {
-          'name': 'item'
-          'sku': 'item'
-          'price': '1.00'
-          'currency': 'USD'
-          'quantity': 1
+    # map some properties?-
+    json =
+      intent: 'sale'
+      payer: payload.payer
+
+    json.redirect_urls = payload.redirect_urls if payload.redirect_urls?
+    json.is_final_capture = payload.is_final_capture if payload.is_final_capture? # boolean
+
+    # USE AMOUNT IF THERE ARE NO TRANSACTIONS
+    unless payload.transactions
+      json.transactions =
+        [ {
+          amount: amount
+          description: 'This is the payment transaction description.' # @TODO
+          #custom: 'EBAY_EMS_90048630024435' # @TODO
+          #invoice_number: chargeData.invoice # @TODO
+          #payment_options: 'allowed_payment_method': 'INSTANT_FUNDING_SOURCE'
+          #soft_descriptor: 'ECHI5786786'
         } ]
-        'amount':
-          'currency': 'USD'
-          'total': '1.00'
-        'description': 'This is the payment description.'
-      } ]
-    ###
-    transactions =
-      [ {
-        'amount': payload.amount
-        'description': 'This is the payment transaction description.' # @TODO
-        #'custom': 'EBAY_EMS_90048630024435' # @TODO
-        #'invoice_number': chargeData.invoice # @TODO
-        #'payment_options': 'allowed_payment_method': 'INSTANT_FUNDING_SOURCE'
-        #'soft_descriptor': 'ECHI5786786'
-      } ]
+    else
+      json.transactions = [{}]
 
-    # Authorize capture
-    # itemslist
-    # details
-    create_payment_json =
-      'intent': payload.intent or 'sale'
-      'payer': payload.payer
-      'transactions': transactions
-      #'redirect_urls':
-      #  'return_url': 'http://www.return.com'
-      #  'cancel_url': 'http://www.cancel.com'
+    # meaning there is only one transaction, do a test with multiple
+    if payload.items and payload.payer.payment_method is 'paypal'
+      json.transactions[0].description = payload.description or 'This is the payment description.'
+      json.transactions[0].amount = amount
+      json.transactions[0].item_list =
+        items: [payload.items]
 
-    if payload.payer.payment_method is 'paypal'
-      console.log 'IS PAYPAL______'
-      create_payment_json =
-        'intent': 'sale'
-        'payer': 'payment_method': 'paypal'
-        'redirect_urls':
-          'return_url': 'http://return.url'
-          'cancel_url': 'http://cancel.url'
-        'transactions': [ {
-          'item_list': 'items': [ {
-            'name': 'item'
-            'sku': 'item'
-            'price': '1.00'
-            'currency': 'USD'
-            'quantity': 1
-          } ]
-          'amount':
-            'currency': 'USD'
-            'total': '1.00'
-          'description': 'This is the payment description.'
-        } ]
-
-    # console.log JSON.stringify(create_payment_json)
-    paypal.payment.create create_payment_json, (err, payment) ->
+    # console.log JSON.stringify(payload)
+    paypal.payment.create json, (err, payment) ->
       return output.sendDone err if err
       output.sendDone charge: payment

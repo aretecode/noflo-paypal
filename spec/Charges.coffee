@@ -10,6 +10,10 @@ l = require('./../components/PaymentHistory.coffee').getComponent()
 s = require('./../components/Subscription.coffee').getComponent()
 generator = require 'creditcard-generator'
 
+# .links[1].href
+http = require 'http'
+url = require 'url'
+
 # for testing
 paypal = require 'paypal-rest-sdk'
 paypal.configure
@@ -126,13 +130,15 @@ describe 'Charges', ->
             'postal_code': '43210'
             'country_code': 'US' } ]
 
+      data =
+        currency: 'USD'
+        amount: 50
+        payer: payer
+
       # Charge 50c
       t.send
         paypal: paypal
-        data:
-          currency: 'USD'
-          amount: 50
-          payer: payer
+        data: data
 
   describe 'GetCharge component', ->
     t = new Tester g
@@ -143,7 +149,6 @@ describe 'Charges', ->
     it 'should fail if non-existend ID is provided', (done) ->
       t.receive 'error', (data) ->
         # chai.expect(data).to.be.an 'object'
-        # chai.expect(data.type).to.equal 'StripeInvalidRequestError'
         # chai.expect(data.param).to.equal 'id'
         done()
 
@@ -186,8 +191,8 @@ describe 'Charges', ->
         .sale
         .id
 
-      #t.receive 'error', (data) ->
-      #  throw new Error(data)
+      t.receive 'error', (data) ->
+        throw new Error(data)
 
       t.receive 'refund', (data) ->
         chai.expect(data).to.be.an 'object'
@@ -202,8 +207,9 @@ describe 'Charges', ->
         currency: 'USD'
 
       setTimeout ->
-        t.send 'paypal', paypal
-        t.send 'id', cid
+        t.send
+          paypal: paypal
+          id: cid
       , 20000 # 200000
 
 
@@ -264,9 +270,10 @@ describe 'Charges', ->
         # chai.expect(data).to.have.length.of 1
         done()
 
-      t.send 'paypal', paypal
-      t.send 'count', 1
-      t.send 'exec', true
+      t.send
+        paypal: paypal
+        count: 1
+        exec: true
 
     # TODO test other ListCharges parameters
 
@@ -291,12 +298,84 @@ describe 'Charges', ->
         'client_id': process.env.PAYPAL_CLIENT_ID
         'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
-      t.send 'paypal', pp
-      t.send 'data',
-        definitions:
-          amount:
-            value: 20 # @TODO: WHY IS THIS IN VALUE AND THE OTHER TOTAL
-            currency: 'USD'
+      t.send
+        paypal: pp
+      t.send
+        data:
+          definitions:
+            amount:
+              value: 20 # @TODO: WHY IS THIS IN VALUE AND THE OTHER TOTAL
+              currency: 'USD'
+
+  # Added this in, the previous test was getting credit card output
+  describe 'CreateCharge PAYPAL component', ->
+    t = new Tester c
+
+    before (done) ->
+      t.start ->
+        done()
+
+    it 'should create a new charge (to be authorized) using paypal', (done) ->
+      t.receive 'charge', (data) ->
+        # console.log "\n\n\n\n\n AUTHORIZED-PAYPAL FROM PAYPAL-CREATE-CHARGE: \n", data, "\n\n\n\n\n"
+        paypalAuthorizeCharge = data
+        done()
+
+      ###
+      data =
+        'intent': 'sale'
+        'payer': 'payment_method': 'paypal'
+        payer_info:
+          'tax_id_type': 'BR_CPF'
+          'tax_id': 'Fh618775690'
+
+        'redirect_urls':
+          'return_url': 'http://return.url'
+          'cancel_url': 'http://cancel.url'
+        'transactions': [ {
+          'item_list': 'items': [ {
+            'name': 'item'
+            'sku': 'item'
+            'price': '1.00'
+            'currency': 'USD'
+            'quantity': 1
+          } ]
+          'amount':
+            'currency': 'USD'
+            'total': '1.00'
+          'description': 'This is the payment description.'
+        } ]
+      ###
+
+      data =
+        currency: 'USD'
+        amount: "1.00"
+        intent: 'sale'
+        description: 'eh'
+        payer:
+          payment_method: 'paypal'
+        items:
+          name: 'item'
+          sku: 'item'
+          price: '1.00'
+          currency: 'USD'
+          quantity: 1
+        redirect_urls:
+          return_url: 'http://return.url',
+          cancel_url: 'http://cancel.url'
+
+
+      t.send
+        paypal: paypal
+        data: data
+
+
+
+
+
+
+
+
 
   ###
   describe 'UpdateCharge component', ->
@@ -344,46 +423,12 @@ describe 'Charges', ->
         id: charge.id
     ###
 
-
-
   ###
-  Added this in, the previous test was getting credit card output
-  describe 'CreateCharge PAYPAL component', ->
-    t = new Tester c
-
-    before (done) ->
-      t.start ->
-        done()
-
-    it 'should create a new charge (to be authorized) using paypal', (done) ->
-      t.receive 'charge', (data) ->
-        console.log "\n\n\n\n\n AUTHORIZED-PAYPAL FROM PAYPAL-CREATE-CHARGE: \n", data, "\n\n\n\n\n"
-        paypalAuthorizeCharge = data
-        done()
-
-      payer =
-        payment_method: 'paypal'
-        ## #
-        'payer_info':
-          'tax_id_type': 'BR_CPF'
-          'tax_id': 'Fh618775690'
-        ## #
-
-      # @TODO: Charge 50c
-      t.send 'data',
-        currency: 'USD'
-        amount: 50
-        payer: payer
-        intent: 'sale' # 'authorize'
-
   describe 'Approve component', ->
     # ALREADY EXECUTED IF IT IS A CREDIT CARD, IF IT IS PAYPAL, IT REQUIRES USER AUTH
     it 'should load the link to approve a `created` PayPal charge', (done) ->
-      # .links[1].href
-      http = require 'http'
-      url = require 'url'
 
-      console.log "\n\n\n authorized-paypal-for-links \n" + JSON.stringify(paypalAuthorizeCharge) + "\n\n\n"
+      # console.log "\n\n\n authorized-paypal-for-links \n" + JSON.stringify(paypalAuthorizeCharge) + "\n\n\n"
 
       approveUrl = url.parse paypalAuthorizeCharge.links[1].href
 
@@ -393,7 +438,7 @@ describe 'Charges', ->
           data += chunk
         res.on 'end', ->
           try
-            callback JSON.parse(JSON.stringify(data)).parse(json)
+            callback JSON.parse(JSON.stringify(data)) # .parse(json)
           catch e
             throw new Error e.message + '. Body:' + JSON.stringify(data)
 
@@ -404,7 +449,7 @@ describe 'Charges', ->
         # headers:
         #   'Authorization': 'Bearer 123456789'
 
-      console.log approveUrl
+      # console.log approveUrl
       req = (options, done, cb) ->
         try
           request = http.request options, (res) ->
@@ -416,7 +461,10 @@ describe 'Charges', ->
           throw new Error(e + " DIDN'T DO REQ")
           done e
 
-      req options, done, (data) -> console.log("\n\n APPROVED-PAYPAL-HTTP-RESULT: \n"); console.log(data); approvedPaypal = data;
+      req options, done, (data) ->
+        console.log("\n\n APPROVED-PAYPAL-HTTP-RESULT: \n")
+        console.log(data)
+        approvedPaypal = data
 
   describe 'Execute component', ->
     t = new Tester x
@@ -436,10 +484,14 @@ describe 'Charges', ->
         assert.fail data, null
         done data
 
-      t.send 'data',
-        payerid: 'fake id? paypal id? email address?'
-        paymentid: paypalAuthorizeCharge.id
+      t.send
+        paypal: paypal
+        data:
+          payerid: 'fake id? paypal id? email address?'
+          paymentid: paypalAuthorizeCharge.id
+  ###
 
+  ###
   describe 'Create & Approve & Execute component', ->
     it 'Create&Approve&Execute component', (done) ->
 
@@ -511,4 +563,4 @@ describe 'Charges', ->
           console.log JSON.stringify(payment)
         return
     , 200000
-###
+  ###
