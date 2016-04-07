@@ -28,13 +28,11 @@ describe 'Charges', ->
   approvedPaypal = null
 
   describe 'CreateCharge component', ->
-    t = new Tester c
-    tx = new Tester x
+    t = new Tester 'noflo-paypal/CreateCharge'
 
     before (done) ->
       t.start ->
-        tx.start ->
-          done()
+        done()
 
     it 'should fail if currency is missing', (done) ->
       t.receive 'error', (data) ->

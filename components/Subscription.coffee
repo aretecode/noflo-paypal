@@ -10,11 +10,6 @@ exports.getComponent = ->
     description: 'Create Plan for Regular'
     icon: 'repeat|refresh'
     inPorts:
-      ###
-      # string (URL)
-      payload.URL.return
-      payload.URL.cancel
-      ###
       urls:
         datatype: 'object'
       intervalname:

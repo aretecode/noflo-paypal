@@ -13,7 +13,6 @@ exports.getComponent = ->
         description: 'Configured Paypal Client'
       error:
         datatype: 'object'
-    errors
 
   c.process (input, output) ->
     return unless input.has 'apikeys'
@@ -28,9 +27,3 @@ exports.getComponent = ->
       output.sendDone client: paypal
     catch e
       output.sendDone error: e
-      ###
-      noflo.helpers.CustomError 'Missing Paypal API key',
-        kind: 'internal_error'
-        code: 'missing_paypal_key'
-        param: 'apiKeys'
-      ###
