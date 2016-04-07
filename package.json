@@ -35,5 +35,22 @@
   "scripts": {
     "start": "./node_modules/.bin/noflo-nodejs --trace --debug",
     "test": "grunt test"
+  },
+  "noflo": {
+    "icon": "university",
+    "components": {
+      "ConfigurePaypal": "components/ConfigurePaypal.coffee",
+      "CreateCardToken": "components/CreateCardToken.coffee",
+      "CreateCharge": "components/CreateCharge.coffee",
+      "DeleteCard": "components/DeleteCard.coffee",
+      "ExecuteCharge": "components/ExecuteCharge.coffee",
+      "GetCharge": "components/GetCharge.coffee",
+      "PaymentHistory": "components/PaymentHistory.coffee",
+      "Payout": "components/Payout.coffee",
+      "RefundCharge": "components/RefundCharge.coffee",
+      "RetrieveCard": "components/RetrieveCard.coffee",
+      "Subscription": "components/Subscription.coffee",
+      "UpdateCharge": "components/UpdateCharge.coffee"
+    }
   }
 }
