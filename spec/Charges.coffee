@@ -283,7 +283,7 @@ describe 'Charges', ->
       t.start ->
         done()
 
-    it 'should subscribe & charge', (done) ->
+    it.skip 'should subscribe & charge with only one subscription', (done) ->
       t.receive 'error', (data) ->
         console.log data
         throw new Error(data)
@@ -306,6 +306,106 @@ describe 'Charges', ->
             amount:
               value: 20 # @TODO: WHY IS THIS IN VALUE AND THE OTHER TOTAL
               currency: 'USD'
+            cycles: '4'
+            frequency: 'MONTH'
+            frequency_interval: '1'
+            name: 'Trial 1'
+            type: 'TRIAL'
+            charge_models: [
+              {
+                amount:
+                  currency: 'USD'
+                  value: '10.60'
+                type: 'SHIPPING'
+              }
+              {
+                amount:
+                  currency: 'USD'
+                  value: '20'
+                type: 'TAX'
+              }
+            ]
+          setup_fee:
+            currency: 'USD'
+            value: '25'
+          cancel_url: 'http://www.cancel.com'
+          return_url: 'http://www.return.com'
+
+    it 'should subscribe & charge with array of definitions', (done) ->
+      t.receive 'error', (data) ->
+        console.log data
+        throw new Error(data)
+
+      t.receive 'sub', (data) ->
+        # console.log data
+        done()
+
+      pp = require 'paypal-rest-sdk'
+      pp.configure
+        'mode': 'sandbox' # sandbox or live
+        'client_id': process.env.PAYPAL_CLIENT_ID
+        'client_secret': process.env.PAYPAL_CLIENT_SECRET
+
+      t.send
+        paypal: pp
+      t.send
+        data:
+          definitions:
+            [
+              {
+                amount:
+                  value: 20
+                  currency: 'USD'
+                'charge_models': [
+                  {
+                    'amount':
+                      'currency': 'USD'
+                      'value': '10.60'
+                    'type': 'SHIPPING'
+                  }
+                  {
+                    'amount':
+                      'currency': 'USD'
+                      'value': '20'
+                    'type': 'TAX'
+                  }
+                ]
+                'cycles': '0'
+                'frequency': 'MONTH'
+                'frequency_interval': '1'
+                'name': 'Regular 1'
+                'type': 'REGULAR'
+              }
+              {
+                'amount':
+                  'currency': 'USD'
+                  'value': '20'
+                'charge_models': [
+                  {
+                    'amount':
+                      'currency': 'USD'
+                      'value': '10.60'
+                    'type': 'SHIPPING'
+                  }
+                  {
+                    'amount':
+                      'currency': 'USD'
+                      'value': '20'
+                    'type': 'TAX'
+                  }
+                ]
+                'cycles': '4'
+                'frequency': 'MONTH'
+                'frequency_interval': '1'
+                'name': 'Trial 1'
+                'type': 'TRIAL'
+              }
+            ]
+          setup_fee:
+            currency: 'USD'
+            value: '25'
+          cancel_url: 'http://www.cancel.com'
+          return_url: 'http://www.return.com'
 
   # Added this in, the previous test was getting credit card output
   describe 'CreateCharge PAYPAL component', ->
@@ -346,7 +446,6 @@ describe 'Charges', ->
           'description': 'This is the payment description.'
         } ]
       ###
-
       data =
         currency: 'USD'
         amount: "1.00"
@@ -368,10 +467,6 @@ describe 'Charges', ->
       t.send
         paypal: paypal
         data: data
-
-
-
-
 
 
 
@@ -495,65 +590,56 @@ describe 'Charges', ->
   describe 'Create & Approve & Execute component', ->
     it 'Create&Approve&Execute component', (done) ->
 
-    console.log "\n\n\n\n CREATE&APPROVED&EXECUTE \n\n\n"
-    create_payment_json =
-      'intent': 'authorize'
-      'payer': 'payment_method': 'paypal'
-      'redirect_urls':
-        'return_url': 'http://return.url'
-        'cancel_url': 'http://cancel.url'
-      'transactions': [ {
-        'item_list': 'items': [ {
-          'name': 'item'
-          'sku': 'item'
-          'price': '1.00'
-          'currency': 'USD'
-          'quantity': 1
+      # ##
+      console.log "\n\n\n\n CREATE&APPROVED&EXECUTE \n\n\n"
+      create_payment_json =
+        'intent': 'authorize'
+        'payer': 'payment_method': 'paypal'
+        'redirect_urls':
+          'return_url': 'http://return.url'
+          'cancel_url': 'http://cancel.url'
+        'transactions': [ {
+          'item_list': 'items': [ {
+            'name': 'item'
+            'sku': 'item'
+            'price': '1.00'
+            'currency': 'USD'
+            'quantity': 1
+          } ]
+          'amount':
+            'currency': 'USD'
+            'total': '1.00'
+          'description': 'This is the payment description.'
         } ]
-        'amount':
+
+      paymenting = null
+      approveUrl = null
+
+      paypal.payment.create create_payment_json, (error, payment) ->
+        paymenting = payment
+        if error
+          console.log error.response
+          throw error
+        else
+          index = 0
+          while index < payment.links.length
+            #Redirect user to this endpoint for redirect url
+            if payment.links[index].rel == 'approval_url'
+              console.log payment.links[index].href
+              approveUrl = payment.links[index].href
+            index++
+          console.log payment
+        return
+      ## #
+
+      execute_payment_json =
+        'payer_id': 'Appended to redirect url'
+        'transactions': [ { 'amount':
           'currency': 'USD'
-          'total': '1.00'
-        'description': 'This is the payment description.'
-      } ]
+          'total': '1.00' } ]
+      paymentId = 'PAYMENT id created in previous step'
+      paymentId = paypalAuthorizeCharge.id
 
-    paymenting = null
-    approveUrl = null
-
-    paypal.payment.create create_payment_json, (error, payment) ->
-      paymenting = payment
-
-      if error
-        console.log error.response
-        throw error
-      else
-        index = 0
-        while index < payment.links.length
-          #Redirect user to this endpoint for redirect url
-          if payment.links[index].rel == 'approval_url'
-            console.log payment.links[index].href
-            approveUrl = payment.links[index].href
-          index++
-        console.log payment
-      return
-
-    execute_payment_json =
-      'payer_id': 'Appended to redirect url'
-      'transactions': [ { 'amount':
-        'currency': 'USD'
-        'total': '1.00' } ]
-    paymentId = 'PAYMENT id created in previous step'
-    paymentId = paymenting
-
-    paypal.payment.execute paymentId, execute_payment_json, (error, payment) ->
-      if error
-        console.log error.response
-        throw error
-      else
-        console.log 'Get Payment Response'
-        console.log JSON.stringify(payment)
-      return
-
-    setTimeout ->
       paypal.payment.execute paymentId, execute_payment_json, (error, payment) ->
         if error
           console.log error.response
@@ -562,5 +648,20 @@ describe 'Charges', ->
           console.log 'Get Payment Response'
           console.log JSON.stringify(payment)
         return
-    , 200000
+
+      console.log paymentId
+      console.log execute_payment_json
+
+      ## #
+      setTimeout ->
+        paypal.payment.execute paymentId, execute_payment_json, (error, payment) ->
+          if error
+            console.log error.response
+            throw error
+          else
+            console.log 'Get Payment Response'
+            console.log JSON.stringify(payment)
+          return
+      , 50000
+      ## #
   ###

@@ -12,6 +12,7 @@ exports.getComponent = ->
         datatype: 'object'
         description: 'Configured Paypal client'
         required: true
+        control: true
     outPorts:
       charge:
         datatype: 'object'

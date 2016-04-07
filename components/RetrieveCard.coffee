@@ -6,12 +6,13 @@ exports.getComponent = ->
     inPorts:
       token:
         datatype: 'string'
-        required: true
         description: 'Credit card token'
+        required: true
       paypal:
         datatype: 'object'
         description: 'Configured Paypal client'
         required: true
+        control: true
     outPorts:
       out:
         datatype: 'object'

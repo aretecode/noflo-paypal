@@ -12,27 +12,25 @@ exports.getComponent = ->
     inPorts:
       id:
         datatype: 'string'
-        required: true
         description: 'Charge ID'
+        required: true
       paypal:
         datatype: 'object'
         description: 'Configured Paypal client'
         required: true
+        control: true
       amount:
         datatype: 'string' # double, int
-        required: false
         description: 'Amount in the smallest currency units, default is entire charge'
-        control: true
+        required: false
       currency:
         datatype: 'string'
-        required: false
         description: 'currency'
-        control: true
+        required: false
       transactionfee:
         datatype: 'boolean'
-        required: false
         description: 'Attempt to refund application fee'
-        control: true
+        required: false
     outPorts:
       refund:
         datatype: 'object'

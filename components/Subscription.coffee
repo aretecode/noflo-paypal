@@ -25,6 +25,7 @@ exports.getComponent = ->
         datatype: 'object'
         description: 'Configured Paypal client'
         required: true
+        control: true
     outPorts:
       sub:
         datatype: 'object'
@@ -35,140 +36,56 @@ exports.getComponent = ->
       [payload, paypal] = input.getData 'data', 'paypal'
       return unless input.ip.type is 'data'
 
-      ###
-        # string
-        payload.name
+      # ENSURE IT HAS PROPERTIES LIKE SETUP FEE
+      # ENSURE TYPE IS ENUM
+      # ENSURE FREQUENCY IS CAPITALS & is enum (month year etc)
 
-        # object
-        payload.setupFee
+      billingPlan =
+        description: 'Create Plan for Regular'
+        name: 'Testing1-Regular1'
+        merchant_preferences:
+          auto_bill_amount: 'yes'
+          cancel_url: 'http://www.cancel.com'
+          return_url: 'http://www.success.com'
+          initial_fail_amount_action: 'continue'
+          max_fail_attempts: '1'
+          setup_fee:
+            currency: 'USD'
+            value: '25'
 
-        # object
-        payload.amount
-        # object | array[object]
-        payload.definitions.chargeModels
+      if Array.isArray payload.definitions
+        billingPlan.payment_definitions = payload.definitions
+      else
+        paymentDefinition =
+          amount: payload.definitions.amount
+          charge_models: payload.definitions.charge_models
 
-        # payload.setupFee; if payment.setupFee? billingPlanAttributes.setupFee = <
-        payload.definitions.amount
-      ###
+        paymentDefinition.cycles = payload.definitions.cycles or '0'
+        paymentDefinition.frequency = payload.definitions.frequency or 'MONTH'
+        paymentDefinition.frequency_interval = payload.definitions.frequency_interval or '1'
+        paymentDefinition.name = payload.definitions.type or 'Regular 1'
+        paymentDefinition.type = payload.definitions.type or 'REGULAR'
 
-      # 'cancel_url': payload.URL.cancel
-      # 'return_url': payload.URL.return
-      billingPlanAttributes =
-        'description': 'Create Plan for Regular'
-        'merchant_preferences':
-          'auto_bill_amount': 'yes'
-          'initial_fail_amount_action': 'continue'
-          'max_fail_attempts': '1'
-        'name': 'example' #; payload.name
-        'type': 'INFINITE'
+        billingPlan.payment_definitions = [paymentDefinition]
 
-      #'payment_definitions': #'definitions' #payment.definitions
-      # factory?
-      defs =
-        'payment_definitions': [
-            {
-              'amount': payload.definitions.amount
-              'cycles': '0'
-              'frequency': 'MONTH'
-              'frequency_interval': '1'
-              'name': 'Regular 1'
-              'type': 'REGULAR'
-            }
-            {
-              'amount':
-                'currency': 'USD'
-                'value': '20'
-              'charge_models': [
-                {
-                  'amount':
-                    'currency': 'USD'
-                    'value': '10.60'
-                  'type': 'SHIPPING'
-                }
-                {
-                  'amount':
-                    'currency': 'USD'
-                    'value': '20'
-                  'type': 'TAX'
-                }
-              ]
-              'cycles': '4'
-              'frequency': 'MONTH'
-              'frequency_interval': '1'
-              'name': 'Trial 1'
-              'type': 'TRIAL'
-            }
-        ]
+      ################
+      # BILLING PLAN
+      billingPlan.description = payload.description if payload.description
+      billingPlan.name = payload.name if payload.name
+      billingPlan.type = payload.type or 'INFINITE'
+      if payload.merchant_preferences?
+        billingPlan.merchant_preferences = payload.merchant_preferences
+      else
+        billingPlan.merchant_preferences =
+          auto_bill_amount: 'yes'
+          initial_fail_amount_action: 'continue'
+          max_fail_attempts: '1'
+        billingPlan.merchant_preferences.setup_fee = payload.setup_fee # if payload.setup_fee
+        billingPlan.merchant_preferences.cancel_url = payload.cancel_url if payload.cancel_url
+        billingPlan.merchant_preferences.return_url = payload.return_url if payload.return_url
 
-      defs[0].charge_models = payload.definitions.chargeModels if payload.definitions.chargeModels?
+      # console.log ' SUBSCRIPTION COMPONENT NPM ', JSON.stringify(billingPlan, null, 2)
 
-      billingPlanAttributes.payment_definitions = defs
-
-      billingPlanAttributes =
-        'description': 'Create Plan for Regular'
-        'merchant_preferences':
-          'auto_bill_amount': 'yes'
-          'cancel_url': 'http://www.cancel.com'
-          'initial_fail_amount_action': 'continue'
-          'max_fail_attempts': '1'
-          'return_url': 'http://www.success.com'
-          'setup_fee':
-            'currency': 'USD'
-            'value': '25'
-        'name': 'Testing1-Regular1'
-        'payment_definitions': [
-          {
-            'amount': payload.definitions.amount
-            'charge_models': [
-              {
-                'amount':
-                  'currency': 'USD'
-                  'value': '10.60'
-                'type': 'SHIPPING'
-              }
-              {
-                'amount':
-                  'currency': 'USD'
-                  'value': '20'
-                'type': 'TAX'
-              }
-            ]
-            'cycles': '0'
-            'frequency': 'MONTH'
-            'frequency_interval': '1'
-            'name': 'Regular 1'
-            'type': 'REGULAR'
-          }
-          {
-            'amount':
-              'currency': 'USD'
-              'value': '20'
-            'charge_models': [
-              {
-                'amount':
-                  'currency': 'USD'
-                  'value': '10.60'
-                'type': 'SHIPPING'
-              }
-              {
-                'amount':
-                  'currency': 'USD'
-                  'value': '20'
-                'type': 'TAX'
-              }
-            ]
-            'cycles': '4'
-            'frequency': 'MONTH'
-            'frequency_interval': '1'
-            'name': 'Trial 1'
-            'type': 'TRIAL'
-          }
-        ]
-        'type': 'INFINITE'
-
-      # console.log ' SUBSCRIPTION COMPONENT NPM ', billingPlanAttributes
-
-      #console.log paypal, ' PAYPAL IN SUBSCRIPTION'
-      paypal.billingPlan.create billingPlanAttributes, (err, billingPlan) ->
+      paypal.billingPlan.create JSON.stringify(billingPlan), (err, billingPlan) ->
         return output.sendDone err if err
         output.sendDone sub: billingPlan

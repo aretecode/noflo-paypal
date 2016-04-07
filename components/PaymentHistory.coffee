@@ -38,6 +38,7 @@ exports.getComponent = ->
         datatype: 'object'
         description: 'Configured Paypal client'
         required: true
+        control: true
     ###
       @see https://developer.paypal.com/webapps/developer/docs/api/#paging--filtering
       @param filters object
@@ -59,7 +60,6 @@ exports.getComponent = ->
     process: (input, output) ->
       return unless input.has 'exec', 'paypal'
       [customer, endtime, count, startid, starttime, startindex, sortby, paypal] = input.getData 'customer', 'endtime', 'count', 'startid', 'starttime', 'startindex', 'sortby', 'paypal'
-
       return unless input.ip.type is 'data'
 
       # Compile the query
