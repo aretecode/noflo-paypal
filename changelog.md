@@ -4,3 +4,8 @@
 # 0.0.4
 * Refactoring CreateCharge & Subscription to move responsibility to the client instead of the component
 * Fixing ConfigurePaypal error return
+* Using noflo 7.3
+
+# 0.0.5
+* Loading spec with the Tester instead of requiring
+* Using noflo 7.4

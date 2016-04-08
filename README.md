@@ -6,23 +6,23 @@
 
 # @TODO
 * [x] Convert to new noflo `process` API
-* [ ] Add Graphs - examples with API Key & ConfigurePaypal
+* [x] Add Graph - examples with API Key & ConfigurePaypal
 * [ ] Change `tests/` to use .noflo.json insteadof requiring the component files
 * [ ] Add full functionality for listed requirements
-* [ ] Remove hardcoded parts from Components and put them into tests
-* [ ] Split tests up
+* [x] Remove hardcoded parts from Components and put them into tests
+* [x] Split tests up
 * [x] Change tests to Grunt
 * [ ]
-* [ ] Improve CreateCharge
-* [ ] ^ add CreateChargeJson ? Add ports for each property?
-* [ ] Improve Subscription
+* [x] Improve CreateCharge
+* [x] Improve Subscription
+* [ ] Implement GetBalance
 
 * [ ] Validate .intent @enum (sale, authorize, or order)
 * [ ] TODO test other ListCharges parameters
 * [ ] Currency in lowest for PayPal, convert?
 * [ ] Create&GetCustomer?
-* [ ] Improve Payout, make dynamic
-* [ ] Subscription & Others, add URL ports (or improve API, at least have it come in some port)
+* [x] Improve Payout, make dynamic
+* [x] Subscription & Others, add URL ports (or improve API, at least have it come in some port)
 * [ ] Reevaluate UpdateCharge
 * [ ] Test, should create a new charge using saved credit card
 * [x] RecieveCard test - why isn't it loading? (was using the same card)

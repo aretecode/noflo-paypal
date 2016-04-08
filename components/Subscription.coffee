@@ -2,6 +2,7 @@
 https://github.com/paypal/PayPal-node-SDK/blob/master/samples/subscription/billing_plans/update.js
 https://github.com/paypal/PayPal-node-SDK/tree/master/samples/subscription/billing_plans
 https://github.com/paypal/PayPal-node-SDK/tree/master/samples/subscription
+https://developer.paypal.com/docs/classic/express-checkout/ht_ec-recurringPaymentProfile-curl-etc/
 ###
 noflo = require 'noflo'
 

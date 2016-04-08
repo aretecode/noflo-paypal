@@ -76,6 +76,12 @@
         "path": "components/UpdateCharge.coffee",
         "source": "components/UpdateCharge.coffee",
         "elementary": true
+      },
+      {
+        "name": "CreateChargeWithConfigurePaypal",
+        "path": "graphs/CreateChargeWithConfigurePaypal.fbp",
+        "source": "graphs/CreateChargeWithConfigurePaypal.fbp",
+        "elementary": false
       }
     ]
   },
