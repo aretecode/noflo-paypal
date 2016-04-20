@@ -2,9 +2,6 @@ noflo = require 'noflo'
 chai = require 'chai'
 uuid = require 'uuid'
 Tester = require 'noflo-tester'
-c = require('./../components/CreateCardToken.coffee').getComponent()
-rc = require('./../components/RetrieveCard.coffee').getComponent()
-d = require('./../components/DeleteCard.coffee').getComponent()
 
 # for testing
 paypal = require 'paypal-rest-sdk'
@@ -17,7 +14,7 @@ describe 'Tokens', ->
   token = null
 
   describe 'CreateCardToken component', ->
-    t = new Tester c
+    t = new Tester 'paypal/CreateCardToken'
     before (done) ->
       t.start ->
         done()
@@ -67,7 +64,7 @@ describe 'Tokens', ->
       t.send 'card', card
 
   describe 'RetrieveCard component', ->
-    t = new Tester rc
+    t = new Tester 'paypal/RetrieveCard'
     before (done) ->
       t.start ->
         done()
@@ -86,7 +83,7 @@ describe 'Tokens', ->
       , 50000 # 200000 #50000
 
   describe 'DeleteCard component', ->
-    t = new Tester d
+    t = new Tester 'paypal/DeleteCard'
     before (done) ->
       t.start ->
         done()

@@ -9,3 +9,11 @@
 # 0.0.5
 * Loading spec with the Tester instead of requiring
 * Using noflo 7.4
+
+# 0.0.6
+* Using `noflo-tester` 0.3
+* Hacking `noflo-tester` to not load `cache`
+* Loading Components in `spec/` with strings insteadof requiring component file in the test
+* Fixing `ConfigurePaypal` variable `data`
+* Adding `ConfigurePaypal` other configuration keys
+* Remove old stuff fromm readme

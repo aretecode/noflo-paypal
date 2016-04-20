@@ -1,6 +1,6 @@
 {
   "name": "noflo-paypal",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "git://github.com/aretecode/noflo-paypal.git"
@@ -18,7 +18,7 @@
     "noflo": "^0.7.4",
     "noflo-core": "^0.1.14",
     "noflo-nodejs": "^0.5.2",
-    "noflo-tester": "^0.0.2",
+    "noflo-tester": "^0.0.3",
     "paypal-rest-sdk": "^1.6.8",
     "uuid": "^2.0.1"
   },

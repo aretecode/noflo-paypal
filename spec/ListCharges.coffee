@@ -1,6 +1,5 @@
 chai = require 'chai'
 Tester = require 'noflo-tester'
-l = require('./../components/PaymentHistory.coffee').getComponent()
 
 paypal = require 'paypal-rest-sdk'
 paypal.configure
@@ -9,7 +8,7 @@ paypal.configure
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
 describe 'ListCharges component', ->
-  t = new Tester l
+  t = new Tester 'paypal/PaymentHistory'
   before (done) ->
     t.start ->
       done()

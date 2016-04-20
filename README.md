@@ -16,9 +16,8 @@
 * [x] Improve CreateCharge
 * [x] Improve Subscription
 * [ ] Implement GetBalance
-
 * [ ] Validate .intent @enum (sale, authorize, or order)
-* [ ] TODO test other ListCharges parameters
+* [ ] Test other ListCharges parameters
 * [ ] Currency in lowest for PayPal, convert?
 * [ ] Create&GetCustomer?
 * [x] Improve Payout, make dynamic
@@ -27,34 +26,11 @@
 * [ ] Test, should create a new charge using saved credit card
 * [x] RecieveCard test - why isn't it loading? (was using the same card)
 
-## Components
-
-### Initial drafts (Round one)
-* [x] Charge customers
-* [x] Make payment subscriptions
-* [x] Send money to customers
-* [x] Refunds
-* [x] Payment history
-
-### Round two
-* [ ] Charge customers
-* [ ] Make payment subscriptions
-* [ ] Send money to customers
-* [ ] Refunds
-* [ ] Payment history
-
 ### Split into sub graphs with full HTTP methods?
-* [ ]
 * [ ] [https://developer.paypal.com/webapps/developer/docs/api/#common-payments-objects](common objects)
 * [ ] [https://developer.paypal.com/webapps/developer/docs/integration/direct/capture-payment/#capture-the-payment](paypal api)
 * [x] [https://github.com/svetly/noflo-stripe/blob/master/components/CreateCharge.coffee](current system)
 
 ### Resources
 * [https://github.com/paypal/PayPal-Node-SDK](Paypal Node SDK)
-
-## Requirements
-1) creating an Invoice
-2) Requesting Money from an existing Customer
-3) having it so they can Send Money to you that is not a Subscription
-4) combination of the above?
-5) something else?
+* [https://developer.paypal.com/docs/integration/web/accept-paypal-payment/#specify-payment-information-to-create-a-payment](Create->Approve->Execute)

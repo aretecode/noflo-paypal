@@ -1,9 +1,6 @@
 chai = require 'chai'
 uuid = require 'uuid'
 Tester = require 'noflo-tester'
-c = require('./../components/CreateCharge.coffee').getComponent()
-g = require('./../components/GetCharge.coffee').getComponent()
-r = require('./../components/RefundCharge.coffee').getComponent()
 generator = require 'creditcard-generator'
 
 # for testing
@@ -18,7 +15,7 @@ describe 'Charges', ->
   secondCharge = null
 
   describe 'CreateCharge component', ->
-    t = new Tester c # 'noflo-paypal/CreateCharge'
+    t = new Tester 'paypal/CreateCharge'
 
     before (done) ->
       t.start ->
@@ -129,7 +126,7 @@ describe 'Charges', ->
         data: data
 
   describe 'GetCharge component', ->
-    t = new Tester g
+    t = new Tester 'paypal/GetCharge'
     before (done) ->
       t.start ->
         done()
@@ -161,7 +158,7 @@ describe 'Charges', ->
         id: charge.id
 
   describe 'RefundCharge component', ->
-    t = new Tester r
+    t = new Tester 'paypal/RefundCharge'
     before (done) ->
       t.start ->
         done()
@@ -224,12 +221,12 @@ describe 'Charges', ->
         done()
 
       # console.log JSON.stringify(charge)
-      ### @TODO or just keep trying every 30 seconds ###
-      ###
+      ## # @TODO or just keep trying every 30 seconds
+      ## #
       setTimeout ->
         t.send 'id', cid
       , 200000
-      ###
+      ## #
       tryTryAgain = setInterval ->
         t.send
           paypal: paypal

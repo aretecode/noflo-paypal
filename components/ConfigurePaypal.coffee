@@ -21,9 +21,9 @@ exports.getComponent = ->
 
     try
       paypal.configure
-        'mode': data.mode or 'sandbox' # sandbox or live
-        'client_id': data.id
-        'client_secret': data.secret
+        'mode': apikeys.mode or 'sandbox' # sandbox or live
+        'client_id': apikeys.id or apikeys.client_id
+        'client_secret': apikeys.secret or apikeys.client_secret
       output.sendDone client: paypal
     catch e
       output.sendDone error: e

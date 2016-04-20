@@ -1,6 +1,5 @@
 chai = require 'chai'
 Tester = require 'noflo-tester'
-c = require('./../components/Payout.coffee').getComponent()
 
 # for testing
 paypal = require 'paypal-rest-sdk'
@@ -10,7 +9,7 @@ paypal.configure
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
 describe 'Payment component', ->
-  t = new Tester c
+  t = new Tester 'paypal/Payout'
 
   before (done) ->
     t.start ->

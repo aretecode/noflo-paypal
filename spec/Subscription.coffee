@@ -1,6 +1,5 @@
 chai = require 'chai'
 Tester = require 'noflo-tester'
-s = require('./../components/Subscription.coffee').getComponent()
 
 # for testing
 paypal = require 'paypal-rest-sdk'
@@ -10,7 +9,7 @@ paypal.configure
   'client_secret': process.env.PAYPAL_CLIENT_SECRET
 
 describe 'Subscription component', ->
-  t = new Tester s
+  t = new Tester 'paypal/Subscription'
   before (done) ->
     t.start ->
       done()

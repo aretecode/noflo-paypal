@@ -1,6 +1,5 @@
 chai = require 'chai'
 Tester = require 'noflo-tester'
-c = require('./../components/CreateCharge.coffee').getComponent()
 
 # for testing
 paypal = require 'paypal-rest-sdk'
@@ -14,7 +13,7 @@ describe 'Charges', ->
 
   # Added this in, the previous test was getting credit card output
   describe 'CreateCharge PAYPAL component', ->
-    t = new Tester c
+    t = new Tester 'paypal/CreateCharge'
 
     before (done) ->
       t.start ->
