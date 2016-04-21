@@ -70,7 +70,7 @@ exports.getComponent = ->
       json.transactions =
         [ {
           amount: amount
-          description: 'This is the payment transaction description.' # @TODO
+          description: paypal.description or 'This is the payment transaction description.' # @TODO
           #custom: 'EBAY_EMS_90048630024435' # @TODO
           #invoice_number: chargeData.invoice # @TODO
           #payment_options: 'allowed_payment_method': 'INSTANT_FUNDING_SOURCE'

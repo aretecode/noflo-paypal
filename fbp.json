@@ -36,6 +36,12 @@
         "elementary": true
       },
       {
+        "name": "FakeExecuteCharge",
+        "path": "components/FakeExecuteCharge.coffee",
+        "source": "components/FakeExecuteCharge.coffee",
+        "elementary": true
+      },
+      {
         "name": "GetCharge",
         "path": "components/GetCharge.coffee",
         "source": "components/GetCharge.coffee",

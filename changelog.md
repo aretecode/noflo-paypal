@@ -17,3 +17,7 @@
 * Fixing `ConfigurePaypal` variable `data`
 * Adding `ConfigurePaypal` other configuration keys
 * Remove old stuff fromm readme
+
+# 0.0.7
+* Adding description to CreateCharge transaction
+* Adding FakeExecuteTest for mock testing
