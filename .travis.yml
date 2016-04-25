@@ -5,3 +5,9 @@ node_js:
 before_script:
 - npm install -g grunt-cli
 script: npm test
+
+deploy:
+  provider: npm
+  api_key: "YOUR API KEY"
+  on:
+    - tags: true

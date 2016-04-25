@@ -6,9 +6,9 @@
     "icon": "university",
     "components": [
       {
-        "name": "ConfigurePaypal",
-        "path": "components/ConfigurePaypal.coffee",
-        "source": "components/ConfigurePaypal.coffee",
+        "name": "ConfigurePayPal",
+        "path": "components/ConfigurePayPal.coffee",
+        "source": "components/ConfigurePayPal.coffee",
         "elementary": true
       },
       {

@@ -21,3 +21,6 @@
 # 0.0.7
 * Adding description to CreateCharge transaction
 * Adding FakeExecuteTest for mock testing
+
+# 0.0.8
+* Change all case to camel-style PayPal
