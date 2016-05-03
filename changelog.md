@@ -24,3 +24,6 @@
 
 # 0.0.8
 * Change all case to camel-style PayPal
+
+# 0.0.9
+* Add delay on FakeExecuteCharge
