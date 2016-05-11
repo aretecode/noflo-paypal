@@ -50,7 +50,7 @@ exports.getComponent = ->
     process: (input, output) ->
       return unless input.has 'id', 'paypal'
       [id, paypal, amount, currency, transactionfee] = input.getData 'id', 'paypal', 'amount', 'currency', 'transactionfee'
-      return unless input.ip.type is 'data'
+      return unless input.ip.type is 'data' # id? and paypal?
 
       data = {}
       data.transaction_fee = true if transactionfee
@@ -63,5 +63,8 @@ exports.getComponent = ->
           currency: currency
 
       paypal.sale.refund id, data, (err, refund) ->
-        return output.sendDone err if err
-        output.sendDone refund: refund
+        return output.sendDone error: err if err
+        # output.sendDone refund: refund
+        output.ports.refund.send refund
+        output.ports.refund.disconnect()
+        output.done()

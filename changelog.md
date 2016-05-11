@@ -26,4 +26,9 @@
 * Change all case to camel-style PayPal
 
 # 0.0.9
-* Add delay on FakeExecuteCharge
+* Using noflo 7.4
+
+# 0.1.0
+* Bump dependency on noflo to 7.5
+* Change output on RefundCharge for compatibility (temporary hack)
+* Remove `fbp.json`
