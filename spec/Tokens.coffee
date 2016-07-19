@@ -74,7 +74,7 @@ describe 'Tokens', ->
         console.log err
         throw new Error(err)
 
-      t.receive 'out', (data) ->
+      t.outs.out.once 'data', (data) ->
         done()
 
       setTimeout ->

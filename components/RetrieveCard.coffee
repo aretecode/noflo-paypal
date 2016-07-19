@@ -19,9 +19,8 @@ exports.getComponent = ->
       error:
         datatype: 'object'
     process: (input, output) ->
-      return unless input.has 'token', 'paypal'
+      return unless input.has 'token', 'paypal', (ip) -> ip.type is 'data'
       [cardId, paypal] = input.getData 'token', 'paypal'
-      return unless input.ip.type is 'data'
 
       paypal.creditCard.get cardId, (err, credit_card) ->
         return output.sendDone err if err

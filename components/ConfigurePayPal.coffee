@@ -15,9 +15,8 @@ exports.getComponent = ->
         datatype: 'object'
 
   c.process (input, output) ->
-    return unless input.has 'apikeys'
+    return unless input.has 'apikeys', (ip) -> ip.type is 'data'
     apikeys = input.getData 'apikeys'
-    return unless input.ip.type is 'data'
 
     try
       paypal.configure

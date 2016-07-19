@@ -20,9 +20,8 @@ exports.getComponent = ->
       error:
         datatype: 'object'
     process: (input, output) ->
-      return unless input.has 'data'
+      return unless input.has 'data', (ip) -> ip.type is 'data'
       [data, paypal] = input.getData 'data', 'paypal'
-      return unless input.ip.type is 'data'
 
       paypal.payout.create data, (err, payout) ->
         return output.sendDone err if err

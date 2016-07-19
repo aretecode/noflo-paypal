@@ -41,9 +41,8 @@ exports.getComponent = ->
     errors
 
   c.process (input, output) ->
-    return unless input.has 'data', 'paypal'
+    return unless input.has 'data', 'paypal', (ip) -> ip.type is 'data'
     [payload, paypal] = input.getData 'data', 'paypal'
-    return unless input.ip.type is 'data'
 
     if payload.currency?
       payload.currency = payload.currency.toUpperCase()

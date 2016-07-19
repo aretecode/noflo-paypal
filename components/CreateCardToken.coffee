@@ -43,9 +43,9 @@ exports.getComponent = ->
     errors
 
   c.process (input, output) ->
-    return unless input.has 'card', 'paypal'
+    return unless input.has 'card', 'paypal', (ip) -> ip.type is 'data'
+
     [card, paypal] = input.getData 'card', 'paypal'
-    return unless input.ip.type is 'data'
 
     # Validate inputs
     errors = c.checkRequired card

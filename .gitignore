@@ -6,3 +6,4 @@ backup
 dev
 *npm-debug.log
 spec/00Process.coffee
+node_modules

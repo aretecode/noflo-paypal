@@ -28,9 +28,8 @@ exports.getComponent = ->
       error:
         datatype: 'object'
     process: (input, output) ->
-      return unless input.has 'data', 'paypal'
+      return unless input.has 'data', 'paypal', (ip) -> ip.type is 'data'
       [payload, paypal] = input.getData 'data', 'paypal'
-      return unless input.ip.type is 'data'
 
       # ENSURE IT HAS PROPERTIES LIKE SETUP FEE
       # ENSURE TYPE IS ENUM

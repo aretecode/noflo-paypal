@@ -13,23 +13,31 @@ exports.getComponent = ->
       customer:
         datatype: 'string'
         description: 'customer ID'
+        control: true
       created:
         datatype: 'object'
         description: 'Date filter, see paypal.com/docs/api/node#list_charges'
+        control: true
       endtime:
         datatype: 'string'
         description: 'Pagination cursor, last object ID'
+        control: true
       count:
         datatype: 'int'
         description: 'Pagination limit/count, defaults to 10' # limit
+        control: true
       starttime:
         datatype: 'string'
+        control: true
       startindex:
         datatype: 'int' #|string
+        control: true
       sortby:
         datatype: 'string'
+        control: true
       startid:
         datatype: 'string'
+        control: true
       exec:
         datatype: 'bang'
         required: true
@@ -58,9 +66,16 @@ exports.getComponent = ->
         datatype: 'object'
 
     process: (input, output) ->
-      return unless input.has 'exec', 'paypal'
-      [customer, endtime, count, startid, starttime, startindex, sortby, paypal] = input.getData 'customer', 'endtime', 'count', 'startid', 'starttime', 'startindex', 'sortby', 'paypal'
-      return unless input.ip.type is 'data'
+      return unless input.has 'exec', 'paypal', (ip) -> ip.type is 'data'
+
+      customer = input.getData 'customer'
+      count = input.getData 'count'
+      startid = input.getData 'startid'
+      starttime = input.getData 'starttime'
+      endtime = input.getData 'endtime'
+      sortby = input.getData 'sortby'
+      startindex = input.getData 'startindex'
+      paypal = input.getData 'paypal'
 
       # Compile the query
       query = {}
@@ -76,7 +91,7 @@ exports.getComponent = ->
       paypal.payment.list query, (err, charges) ->
         return output.sendDone err if err
 
-        output.send charges: charges
+        output.ports.charges.send charges
         if output.ports.hasmore.isAttached()
           output.send hasmore: charges.has_more
         output.done()

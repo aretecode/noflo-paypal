@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "modules": [
+    {
+      "name": "paypal",
+      "runtime": "noflo",
+      "base": "",
+      "icon": "university",
+      "components": [
+        {
+          "name": "ConfigurePayPal",
+          "path": "components/ConfigurePayPal.coffee",
+          "source": "components/ConfigurePayPal.coffee",
+          "elementary": true
+        },
+        {
+          "name": "CreateCardToken",
+          "path": "components/CreateCardToken.coffee",
+          "source": "components/CreateCardToken.coffee",
+          "elementary": true
+        },
+        {
+          "name": "CreateCharge",
+          "path": "components/CreateCharge.coffee",
+          "source": "components/CreateCharge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "DeleteCard",
+          "path": "components/DeleteCard.coffee",
+          "source": "components/DeleteCard.coffee",
+          "elementary": true
+        },
+        {
+          "name": "ExecuteCharge",
+          "path": "components/ExecuteCharge.coffee",
+          "source": "components/ExecuteCharge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "FakeExecuteCharge",
+          "path": "components/FakeExecuteCharge.coffee",
+          "source": "components/FakeExecuteCharge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "GetCharge",
+          "path": "components/GetCharge.coffee",
+          "source": "components/GetCharge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "PaymentHistory",
+          "path": "components/PaymentHistory.coffee",
+          "source": "components/PaymentHistory.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Payout",
+          "path": "components/Payout.coffee",
+          "source": "components/Payout.coffee",
+          "elementary": true
+        },
+        {
+          "name": "RefundCharge",
+          "path": "components/RefundCharge.coffee",
+          "source": "components/RefundCharge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "RetrieveCard",
+          "path": "components/RetrieveCard.coffee",
+          "source": "components/RetrieveCard.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Subscription",
+          "path": "components/Subscription.coffee",
+          "source": "components/Subscription.coffee",
+          "elementary": true
+        },
+        {
+          "name": "UpdateCharge",
+          "path": "components/UpdateCharge.coffee",
+          "source": "components/UpdateCharge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "CreateChargeWithConfigurePaypal",
+          "path": "graphs/CreateChargeWithConfigurePaypal.fbp",
+          "source": "graphs/CreateChargeWithConfigurePaypal.fbp",
+          "elementary": false
+        }
+      ]
+    },
+    {
+      "name": "",
+      "description": "Flow-Based Programming environment for JavaScript",
+      "runtime": "noflo",
+      "base": "node_modules/noflo",
+      "components": [
+        {
+          "name": "Graph",
+          "path": "node_modules/noflo/components/Graph.js",
+          "source": "node_modules/noflo/components/Graph.js",
+          "elementary": true
+        }
+      ]
+    },
+    {
+      "name": "core",
+      "description": "NoFlo Essentials",
+      "runtime": "noflo",
+      "base": "node_modules/noflo-core",
+      "components": [
+        {
+          "name": "Callback",
+          "path": "node_modules/noflo-core/components/Callback.coffee",
+          "source": "node_modules/noflo-core/components/Callback.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Copy",
+          "path": "node_modules/noflo-core/components/Copy.coffee",
+          "source": "node_modules/noflo-core/components/Copy.coffee",
+          "elementary": true
+        },
+        {
+          "name": "DisconnectAfterPacket",
+          "path": "node_modules/noflo-core/components/DisconnectAfterPacket.coffee",
+          "source": "node_modules/noflo-core/components/DisconnectAfterPacket.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Drop",
+          "path": "node_modules/noflo-core/components/Drop.coffee",
+          "source": "node_modules/noflo-core/components/Drop.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Kick",
+          "path": "node_modules/noflo-core/components/Kick.coffee",
+          "source": "node_modules/noflo-core/components/Kick.coffee",
+          "elementary": true
+        },
+        {
+          "name": "MakeFunction",
+          "path": "node_modules/noflo-core/components/MakeFunction.coffee",
+          "source": "node_modules/noflo-core/components/MakeFunction.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Merge",
+          "path": "node_modules/noflo-core/components/Merge.coffee",
+          "source": "node_modules/noflo-core/components/Merge.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Output",
+          "path": "node_modules/noflo-core/components/Output.coffee",
+          "source": "node_modules/noflo-core/components/Output.coffee",
+          "elementary": true
+        },
+        {
+          "name": "ReadGlobal",
+          "path": "node_modules/noflo-core/components/ReadGlobal.coffee",
+          "source": "node_modules/noflo-core/components/ReadGlobal.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Repeat",
+          "path": "node_modules/noflo-core/components/Repeat.coffee",
+          "source": "node_modules/noflo-core/components/Repeat.coffee",
+          "elementary": true
+        },
+        {
+          "name": "RepeatAsync",
+          "path": "node_modules/noflo-core/components/RepeatAsync.coffee",
+          "source": "node_modules/noflo-core/components/RepeatAsync.coffee",
+          "elementary": true
+        },
+        {
+          "name": "RepeatDelayed",
+          "path": "node_modules/noflo-core/components/RepeatDelayed.coffee",
+          "source": "node_modules/noflo-core/components/RepeatDelayed.coffee",
+          "elementary": true
+        },
+        {
+          "name": "RunInterval",
+          "path": "node_modules/noflo-core/components/RunInterval.coffee",
+          "source": "node_modules/noflo-core/components/RunInterval.coffee",
+          "elementary": true
+        },
+        {
+          "name": "RunTimeout",
+          "path": "node_modules/noflo-core/components/RunTimeout.coffee",
+          "source": "node_modules/noflo-core/components/RunTimeout.coffee",
+          "elementary": true
+        },
+        {
+          "name": "SendNext",
+          "path": "node_modules/noflo-core/components/SendNext.coffee",
+          "source": "node_modules/noflo-core/components/SendNext.coffee",
+          "elementary": true
+        },
+        {
+          "name": "Split",
+          "path": "node_modules/noflo-core/components/Split.coffee",
+          "source": "node_modules/noflo-core/components/Split.coffee",
+          "elementary": true
+        }
+      ]
+    },
+    {
+      "name": "core",
+      "description": "NoFlo Essentials",
+      "runtime": "noflo-nodejs",
+      "base": "node_modules/noflo-core",
+      "components": [
+        {
+          "name": "ReadEnv",
+          "path": "node_modules/noflo-core/components/ReadEnv.coffee",
+          "source": "node_modules/noflo-core/components/ReadEnv.coffee",
+          "elementary": true
+        }
+      ]
+    }
+  ]
+}

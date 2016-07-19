@@ -2,6 +2,7 @@ chai = require 'chai'
 uuid = require 'uuid'
 Tester = require 'noflo-tester'
 generator = require 'creditcard-generator'
+require '../.env'
 
 # for testing
 paypal = require 'paypal-rest-sdk'

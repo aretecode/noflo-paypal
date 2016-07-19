@@ -27,9 +27,8 @@ exports.getComponent = ->
       error:
         datatype: 'object'
     process: (input, output) ->
-      return unless input.has 'id', 'paypal'
+      return unless input.has 'id', 'paypal', (ip) -> ip.type is 'data'
       [id, paypal, description, metadata] = input.getData 'id', 'paypal', 'description', 'metadata'
-      return unless input.ip.type is 'data'
 
       unless description or metadata
         return output.sendDone noflo.helpers.CustomError 'Description or metadata has to be provided',

@@ -1,13 +1,7 @@
 language: node_js
 sudo: false
 node_js:
-  - "4.2"
+- "4.2"
 before_script:
 - npm install -g grunt-cli
 script: npm test
-
-deploy:
-  provider: npm
-  api_key: "YOUR API KEY"
-  on:
-    - tags: true

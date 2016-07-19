@@ -48,9 +48,8 @@ exports.getComponent = ->
           "total": "2.34"
     ###
     process: (input, output) ->
-      return unless input.has 'id', 'paypal'
+      return unless input.has 'id', 'paypal', (ip) -> ip.type is 'data'
       [id, paypal, amount, currency, transactionfee] = input.getData 'id', 'paypal', 'amount', 'currency', 'transactionfee'
-      return unless input.ip.type is 'data' # id? and paypal?
 
       data = {}
       data.transaction_fee = true if transactionfee

@@ -24,9 +24,8 @@ exports.getComponent = ->
     description: 'execute a charge created in a previous step'
     icon: 'money'
     process: (input, output) ->
-      return unless input.has 'data', 'paypal'
+      return unless input.has 'data', 'paypal', (ip) -> ip.type is 'data'
       [data, paypal] = input.getData 'data', 'paypal'
-      return unless input.ip.type is 'data'
 
       setTimeout ->
         output.sendDone charge:
